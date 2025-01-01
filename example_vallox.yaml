@@ -13,22 +13,11 @@ uart:
 #   after:
 #     timeout: 15ms
 
-
-light:
- - platform: status_led
-   id: data_active_led
-   name: status_led
-   internal: true
-   pin:
-     number: GPIO7
-     inverted: true
-
-
 external_components:
-#  - source:
-#      type: local
-#      path: mycomponents
-#    components: [ vallox ]
+# - source:
+#     type: local
+#     path: mycomponents
+#   components: [ vallox ]
   - source: github://github-k8n/vallox
     components: [ vallox ]
 
