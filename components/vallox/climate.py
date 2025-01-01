@@ -47,7 +47,6 @@ CONF_FRONT_HEATING        = "front_heating"
 CONF_SUMMER_MODE          = "summer_mode"
 CONF_PROBLEM              = "problem"
 CONF_ERROR_RELAY          = "error_relay"
-CONF_EXTRA_FUNC           = "extra_func"
 CONF_HEAT_BYPASS          = "heat_bypass"
 CONF_SERVICE_RESET        = "service_reset"
 CONF_FAULT_CONDITION      = "fault_condition"
@@ -194,8 +193,6 @@ CONFIG_SCHEMA = cv.All(
             cv.Optional(CONF_ERROR_RELAY): binary_sensor.binary_sensor_schema(
                 device_class=DEVICE_CLASS_PROBLEM,
             ),
-            cv.Optional(CONF_EXTRA_FUNC): binary_sensor.binary_sensor_schema(
-            ),
             cv.Optional(CONF_HEAT_BYPASS): number.number_schema(
               ValloxVentilationHeatBypassNum,
               device_class=DEVICE_CLASS_TEMPERATURE,
@@ -310,9 +307,6 @@ async def to_code(config):
   if CONF_ERROR_RELAY in config:
     sens = await binary_sensor.new_binary_sensor(config[CONF_ERROR_RELAY])
     cg.add(var.set_error_relay_binary_sensor(sens))
-  if CONF_EXTRA_FUNC in config:
-    sens = await binary_sensor.new_binary_sensor(config[CONF_EXTRA_FUNC])
-    cg.add(var.set_extra_func_binary_sensor(sens))
   if CONF_HEAT_BYPASS in config:
     num_heat_bypass_var = await number.new_number(
       config[CONF_HEAT_BYPASS],

@@ -4,7 +4,7 @@
 namespace esphome {
 	namespace vallox {
 		static const char *TAG = "vallox";
-		
+
 /////////////////////////////////////////////////////////////////////////////////////////
 
 		void ValloxVentilationHeatBypassNum::control(float value) {
@@ -137,7 +137,6 @@ namespace esphome {
 			if (this->summer_mode_binary_sensor_      != nullptr) { LOG_BINARY_SENSOR("  ", "Sensor summer mode",            this->summer_mode_binary_sensor_);      }
 			if (this->problem_binary_sensor_          != nullptr) { LOG_BINARY_SENSOR("  ", "Sensor problem",                this->problem_binary_sensor_);          }
 			if (this->error_relay_binary_sensor_      != nullptr) { LOG_BINARY_SENSOR("  ", "Sensor error relay",            this->error_relay_binary_sensor_);      }
-			// if (this->extra_func_binary_sensor_       != nullptr) { LOG_BINARY_SENSOR("  ", "Sensor extra func",             this->extra_func_binary_sensor_);       }
 
 			// log number details
 			if (this->heat_bypass_number_   != nullptr) { LOG_NUMBER("  ", "Number heat bypass",   this->heat_bypass_number_);   }
@@ -218,7 +217,7 @@ namespace esphome {
 			}
 			this->publish_state();
 		}
-      
+
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -236,12 +235,12 @@ namespace esphome {
 			if (this->service_period_sensor_       != nullptr) { if (!this->service_period_sensor_->has_state())     { requestVariable(VX_VARIABLE_SERVICE_PERIOD   ); }}
 			if (this->service_remaining_sensor_    != nullptr) { if (!this->service_remaining_sensor_->has_state())  { requestVariable(VX_VARIABLE_SERVICE_REMAINING); }}
 			if (this->temperature_target_sensor_   != nullptr) { if (!this->temperature_target_sensor_->has_state()) { requestVariable(VX_VARIABLE_HEATING_TARGET   ); }}
-			
+
 			if (this->temperature_outside_sensor_  != nullptr) { if (!this->temperature_outside_sensor_->has_state())  { requestVariable(VX_VARIABLE_T_OUTSIDE ); }}
 			if (this->temperature_inside_sensor_   != nullptr) { if (!this->temperature_inside_sensor_->has_state())   { requestVariable(VX_VARIABLE_T_INSIDE  ); }}
 			if (this->temperature_outgoing_sensor_ != nullptr) { if (!this->temperature_outgoing_sensor_->has_state()) { requestVariable(VX_VARIABLE_T_OUTGOING); }}
 			if (this->temperature_incoming_sensor_ != nullptr) { if (!this->temperature_incoming_sensor_->has_state()) { requestVariable(VX_VARIABLE_T_INCOMING); }}
-			
+
 			if (this->status_on_binary_sensor_      != nullptr) { if (!this->status_on_binary_sensor_->has_state())      { retryStatus = 1; }}
 			if (this->service_needed_binary_sensor_ != nullptr) { if (!this->service_needed_binary_sensor_->has_state()) { retryStatus = 1; }}
 			if (this->heating_binary_sensor_        != nullptr) { if (!this->heating_binary_sensor_->has_state())        { retryStatus = 1; }}
@@ -254,8 +253,6 @@ namespace esphome {
 			if (this->status_motor_out_binary_sensor_ != nullptr) { if (!this->status_motor_out_binary_sensor_->has_state()) { retry08 = 1; }}
 			if (this->front_heating_binary_sensor_    != nullptr) { if (!this->front_heating_binary_sensor_->has_state())    { retry08 = 1; }}
 			if (this->error_relay_binary_sensor_      != nullptr) { if (!this->error_relay_binary_sensor_->has_state())      { retry08 = 1; }}
-			// Not needed anymore, status of selected function/switch type is pulled from program variable
-			// if (this->extra_func_binary_sensor_       != nullptr) { if (!this->extra_func_binary_sensor_->has_state())       { retry08 = 1; }}
 			if (retry08)     { requestVariable(VX_VARIABLE_IO_08);  }
 
 			if (this->switch_type_text_sensor_     != nullptr) { if (!this->switch_type_text_sensor_->has_state())     { retryProgram = 1; }}
@@ -264,13 +261,13 @@ namespace esphome {
 
 			if (this->switch_active_binary_sensor_ != nullptr) { if (!this->switch_active_binary_sensor_->has_state()) { requestVariable(VX_VARIABLE_FLAGS_06); }}
 
-			// do not request variable, mainboard will not answer (without fault?)
+			// do not request variable, mainboard will not answer (without fault? Does it get pushed?)
 			// if (this->fault_condition_text_sensor_ != nullptr) { if (!this->fault_condition_text_sensor_->has_state()) { requestVariable(VX_VARIABLE_FAULT_CODE); }}
 
 			if (this->heat_bypass_number_          != nullptr) { if (!this->heat_bypass_number_->has_state())          { requestVariable(VX_VARIABLE_T_HEAT_BYPASS); }}
 			if (this->fan_speed_max_number_        != nullptr) { if (!this->fan_speed_max_number_->has_state())        { requestVariable(VX_VARIABLE_FAN_SPEED_MAX); }}
 			if (this->fan_speed_min_number_        != nullptr) { if (!this->fan_speed_min_number_->has_state())        { requestVariable(VX_VARIABLE_FAN_SPEED_MIN); }}
-			
+
 			if (this->co2_sensor_                  != nullptr) { if (!this->co2_sensor_->has_state())                  { requestVariable(VX_VARIABLE_CO2_LO); requestVariable(VX_VARIABLE_CO2_HI); }}
 			if (this->humidity_1_sensor_           != nullptr) { if (!this->humidity_1_sensor_->has_state())           { requestVariable(VX_VARIABLE_RH1); }}
 			if (this->humidity_2_sensor_           != nullptr) { if (!this->humidity_2_sensor_->has_state())           { requestVariable(VX_VARIABLE_RH2); }}
@@ -280,7 +277,7 @@ namespace esphome {
 
 		void ValloxVentilation::loop() {
 			ionow = millis();
-			
+
 			// Check incoming data, read unsigned char
 			if (this->available() >= 1) {
 				this->read_byte(&iomessage_recv_byte);
@@ -288,7 +285,7 @@ namespace esphome {
 				updateState();
 			} else if (getState() == RECEIVED_IDLE) {  // got time on our hands and are not waiting on something like checksum from previous sent message, check if we have something new to send.
 				if ((ionow - iosendts) > SEND_INTERVAL) {  // non-blocking delay between sending packets
-					if (iomessage_send_queue.size() > 0) {   
+					if (iomessage_send_queue.size() > 0) {
 						sendMessage(iomessage_send_queue.front());
 						iots = ionow;
 						iosendts = ionow;
@@ -335,7 +332,7 @@ namespace esphome {
 			}
 		}
 
-	
+
 		void ValloxVentilation::setState(uint newstate) {
 			iostate = newstate;
 			if (newstate == RECEIVED_IDLE) {
@@ -365,7 +362,7 @@ namespace esphome {
 
 		void ValloxVentilation::sendMessage(vector<unsigned char> newmessage) {
 			unsigned char message[VX_MSG_LENGTH];
-			
+
 			message[0] = newmessage[0];
 			message[1] = newmessage[1];
 			message[2] = newmessage[2];
@@ -420,10 +417,10 @@ namespace esphome {
 							setState(RECEIVED_SYSTEM_AWAITING_SENDER);  // let's retry from here including the received system variable 0x01
 						} else {
 							setState(RECEIVED_IDLE); // nothing valid and not the start of new packet.. ignore and start from scratch
-						}						
+						}
 					} else {
 						iomessage_recv[2] = iomessage_recv_byte;
-						addChecksum(iomessage_recv_byte);						
+						addChecksum(iomessage_recv_byte);
 						setState(RECEIVED_RECIPIENT_AWAITING_VARIABLE);
 					}
 					break;
@@ -457,9 +454,9 @@ namespace esphome {
 					break;
 			}
 		}
-		
-		
-		
+
+
+
 		void ValloxVentilation::requestVariable(unsigned char variable) {
 			vector<unsigned char> newmessage(6);
 			newmessage[0] = VX_MSG_DOMAIN;
@@ -486,10 +483,10 @@ namespace esphome {
 			newmessage[3] = variable;
 			newmessage[4] = value;
 			newmessage[5] = getChecksum(newmessage);
-			
+
 			if (iomessage_send_queue.size() < SEND_QUEUE_MAX_DEPTH) { iomessage_send_queue.push(newmessage); }
 		}
-		
+
 		void ValloxVentilation::decodeFlags(unsigned char element, unsigned char value) {
 			if (element == VX_VARIABLE_STATUS) {
 				if (this->status_on_binary_sensor_      != nullptr) { this->status_on_binary_sensor_->publish_state(      (value & VX_STATUS_FLAG_POWER)        != 0x00 ); }
@@ -511,7 +508,6 @@ namespace esphome {
 				if (this->status_motor_out_binary_sensor_ != nullptr) { this->status_motor_out_binary_sensor_->publish_state(!((value & VX_08_FLAG_MOTOR_OUT)     != 0x00 )); }
 				if (this->front_heating_binary_sensor_    != nullptr) { this->front_heating_binary_sensor_->publish_state(     (value & VX_08_FLAG_FRONT_HEATING) != 0x00 ) ; }
 				if (this->error_relay_binary_sensor_      != nullptr) { this->error_relay_binary_sensor_->publish_state(       (value & VX_08_FLAG_ERROR_RELAY)   != 0x00 ) ; }
-				// if (this->extra_func_binary_sensor_       != nullptr) { this->extra_func_binary_sensor_->publish_state(        (value & VX_08_FLAG_EXTRA_FUNC)    != 0x00 ) ; }
 			} else if (element == VX_VARIABLE_FLAGS_06) {
 				if (this->switch_active_binary_sensor_ != nullptr) { this->switch_active_binary_sensor_->publish_state( (value & VX_06_FIREPLACE_FLAG_IS_ACTIVE) != 0x00 ); }
 			} else if (element == VX_VARIABLE_PROGRAM) {
@@ -661,8 +657,8 @@ namespace esphome {
 			}
 		}
 
-		
-		
+
+
 		//////////////////////////////////
 		// Helper functions //
 		/////////////////////////////
@@ -706,6 +702,6 @@ namespace esphome {
 			return NOT_SET;
 		}
 
-	
+
 	}
 }

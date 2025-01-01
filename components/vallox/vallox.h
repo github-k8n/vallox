@@ -237,7 +237,6 @@ namespace esphome {
 				void set_summer_mode_binary_sensor(binary_sensor::BinarySensor *sensor)      { this->summer_mode_binary_sensor_      = sensor; }
 				void set_problem_binary_sensor(binary_sensor::BinarySensor *sensor)          { this->problem_binary_sensor_          = sensor; }
 				void set_error_relay_binary_sensor(binary_sensor::BinarySensor *sensor)      { this->error_relay_binary_sensor_      = sensor; }
-				// void set_extra_func_binary_sensor(binary_sensor::BinarySensor *sensor)       { this->extra_func_binary_sensor_       = sensor; }
 				// number controls
 				void set_heat_bypass_number(number::Number *number)   { this->heat_bypass_number_ = number; }
 				void set_fan_speed_max_number(number::Number *number) { this->fan_speed_max_number_ = number; }
@@ -324,7 +323,6 @@ namespace esphome {
 				binary_sensor::BinarySensor *summer_mode_binary_sensor_{nullptr};
 				binary_sensor::BinarySensor *problem_binary_sensor_{nullptr};
 				binary_sensor::BinarySensor *error_relay_binary_sensor_{nullptr};
-				// binary_sensor::BinarySensor *extra_func_binary_sensor_{nullptr};
 				number::Number *heat_bypass_number_{nullptr};
 				number::Number *fan_speed_max_number_{nullptr};
 				number::Number *fan_speed_min_number_{nullptr};
