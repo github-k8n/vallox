@@ -1,3 +1,10 @@
+# change tx_pin and rx_pin to the pins used in your setup
+# To avoid interfering with the bus connection,
+# make sure that you are not using the same pins for serial logging
+# or disable serial logging (wifi will still show logs) by adding:
+# logger:
+#   baud_rate: 0
+# see https://esphome.io/components/logger.html for more details
 uart:
   id: uart_bus
   tx_pin:
@@ -24,7 +31,7 @@ external_components:
 
 
 climate:
-    # main component is the climate component which controls fan speed, target temperature, heating mode and on/off status and shows current incoming temperature.
+    # main component is the climate component which controls fan speed, target temperature, heating mode and on/off status and shows current inside temperature.
   - platform: vallox
     id: vallox_climate
     name: climate
